@@ -186,6 +186,36 @@ query getNotesArchive {
   }
 }
 
+query getPlanning {
+	getPlanning {
+    planningId,
+    matieres {
+      matiereName
+    },
+    salles {
+      campus {
+        campusName
+      }
+      salleName
+    },
+    dateDebut,
+    dateFin
+    
+  }
+}
+
+query getPlanningArchive {
+	getPlanningArchive {
+    planningId,
+    matiereId,
+    salleId,
+    dateDebut,
+    dateFin,
+    deleted_at
+  }
+}
+
+
 mutation insertCampus {
   insertCampus (value: { campusName : "Republique" adresse: "30-32 Av. de la République" }) {
     campusId,
@@ -267,6 +297,24 @@ mutation insertNotes {
     matieres {
       matiereName
     }
+  }
+}
+
+mutation insertPlanning {
+  insertPlanning (value: {classeId:1, matiereId: 1,salleId: 1,dateDebut : "2022-04-26T14:00:00.000Z", dateFin: "2022-04-26T17:30:00.000Z"}) {
+    planningId,
+    matieres {
+      matiereName
+    },
+    salles {
+      campus {
+        campusName
+      }
+      salleName
+    },
+    dateDebut,
+    dateFin
+    
   }
 }
 
@@ -356,6 +404,24 @@ mutation updateNotes {
   }
 }
 
+mutation updatePlanning {
+  updatePlanning (value: { planningId:1,salleId: 1,dateDebut : "2022-04-26T09:00:00.000Z", dateFin: "2022-04-26T13:00:00.000Z"}) {
+    planningId,
+    matieres {
+      matiereName
+    },
+    salles {
+      campus {
+        campusName
+      }
+      salleName
+    },
+    dateDebut,
+    dateFin
+    
+  }
+}
+
 mutation deleteCampus {
   deleteCampus (campusId :1) {
     campusId
@@ -433,5 +499,23 @@ mutation deleteNotes {
     matieres {
       matiereName
     }
+  }
+}
+
+mutation deletePlanning {
+  deletePlanning (planningId:1) {
+    planningId,
+    matieres {
+      matiereName
+    },
+    salles {
+      campus {
+        campusName
+      }
+      salleName
+    },
+    dateDebut,
+    dateFin
+    
   }
 }

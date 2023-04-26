@@ -11,6 +11,7 @@ import { elevesControlers } from './controlers/eleves.js'
 import { professeursControlers } from './controlers/professeurs.js'
 import { matieresControlers } from './controlers/matieres.js'
 import { notesControlers } from './controlers/notes.js'
+import { planningControlers } from './controlers/planning.js'
 
 var app = express()
 const dateScalar = new GraphQLScalarType({
@@ -310,27 +311,51 @@ var schema = buildSchema(`
   }
   
   type planning {
-    planningId : Int
-    classeId : Int
-    matiereId : Int
-    salleId : Int
-    dateDebut : Date
-    dateFin : Date
+    planningId : Int!
+    classeId : Int!
+    matiereId : Int!
+    salleId : Int!
+    dateDebut : Date!
+    dateFin : Date!
     classes : classes 
     matieres : matieres 
     salles : salles 
   }
-	input planningSelect {
+  type planningArchive {
+    planningId : Int!
     classeId : Int!
-    dateDebut :  Date!
-    dateFin :  Date!
-  }
-  input planningInput {
-    classeId : Int!
+    matiereId : Int!
     salleId : Int!
     dateDebut : Date!
     dateFin : Date!
-  }   
+    deleted_at : Date!
+  }
+  input periode {
+    dateDebut: Date!
+    dateFin: Date!
+  }
+	input planningSelect {
+    planningId : Int
+    classeId : Int
+    matiereId : Int
+    salleId : Int
+    periode : periode
+  }
+  input planningInsert {
+    classeId : Int!
+    matiereId : Int!
+    salleId : Int!
+    dateDebut : Date!
+    dateFin : Date!
+  }
+  input planningUpdate {
+    planningId : Int!
+    classeId : Int
+    matiereId : Int
+    salleId : Int
+    dateDebut : Date!
+    dateFin : Date!
+  }
 
   type Query {
 		
@@ -404,6 +429,13 @@ var schema = buildSchema(`
     "Permet de recuperer la liste des notes archivées"
 		getNotesArchive (value: notesSelect): [notesArchive]
 
+
+
+    "Permet de recuperer le planning"
+		getPlanning (value: planningSelect): [planning]
+
+    "Permet de recuperer la liste des planning archivés"
+		getPlanningArchive (value: planningSelect): [planningArchive]
   }
 
   type Mutation {
@@ -505,6 +537,17 @@ var schema = buildSchema(`
 		"Permet de supprimer une notes"
     deleteNotes (noteId: Int!) : notes
 
+
+
+    "Permet d'ajouter un element au planning"
+    insertPlanning (value: planningInsert!) : planning
+
+		"Permet de modifier le planning"
+    updatePlanning (value: planningUpdate!) : planning
+
+		"Permet de supprimer un element du planning"
+    deletePlanning (planningId: Int!) : planning
+
   }
 `)
 
@@ -522,6 +565,7 @@ var root = {
   ...professeursControlers,
   ...matieresControlers,
 	...notesControlers,
+  ...planningControlers
 
 }
 

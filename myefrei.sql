@@ -160,8 +160,8 @@ CREATE TABLE Planning (
 	classeId INT NOT NULL,
 	matiereId INT NOT NULL,
     salleId INT NOT NULL,
-    dateDebut DATETIME NOT NULL UNIQUE,
-    dateFin DATETIME NOT NULL UNIQUE,
+    dateDebut DATETIME NOT NULL,
+    dateFin DATETIME NOT NULL,
     PRIMARY KEY (planningId),
     FOREIGN KEY (classeId) REFERENCES Classes(classeId),
     FOREIGN KEY (matiereId) REFERENCES Matieres(matiereId),
@@ -172,8 +172,8 @@ CREATE TABLE PlanningArchive (
 	classeId INT NOT NULL,
 	matiereId INT NOT NULL,
     salleId INT NOT NULL,
-    dateDebut DATETIME NOT NULL UNIQUE,
-    dateFin DATETIME NOT NULL UNIQUE,
+    dateDebut DATETIME NOT NULL,
+    dateFin DATETIME NOT NULL,
     deleted_at DATETIME NOT NULL DEFAULT NOW(),
     PRIMARY KEY (planningId)
 );

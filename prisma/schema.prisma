@@ -128,8 +128,8 @@ model planning {
   classeId   Int
   matiereId  Int
   salleId    Int
-  dateDebut  DateTime @unique(map: "dateDebut") @db.DateTime(0)
-  dateFin    DateTime @unique(map: "dateFin") @db.DateTime(0)
+  dateDebut  DateTime @db.DateTime(0)
+  dateFin    DateTime @db.DateTime(0)
   classes    classes  @relation(fields: [classeId], references: [classeId], onDelete: NoAction, onUpdate: NoAction, map: "planning_ibfk_1")
   matieres   matieres @relation(fields: [matiereId], references: [matiereId], onDelete: NoAction, onUpdate: NoAction, map: "planning_ibfk_2")
   salles     salles   @relation(fields: [salleId], references: [salleId], onDelete: NoAction, onUpdate: NoAction, map: "planning_ibfk_3")
@@ -144,8 +144,8 @@ model planningarchive {
   classeId   Int
   matiereId  Int
   salleId    Int
-  dateDebut  DateTime @unique(map: "dateDebut") @db.DateTime(0)
-  dateFin    DateTime @unique(map: "dateFin") @db.DateTime(0)
+  dateDebut  DateTime @db.DateTime(0)
+  dateFin    DateTime @db.DateTime(0)
   deleted_at DateTime @default(now()) @db.DateTime(0)
 }
 
