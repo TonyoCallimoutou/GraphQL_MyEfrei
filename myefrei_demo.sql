@@ -10,7 +10,6 @@ INSERT INTO Salles (CampusId, salleName)
 	VALUES
     (3, "VISIO"),
     (1,"A001"),
-    (1,"A001"),
     (1,"A002"),
     (1,"A003"),
     (1,"A004"),
@@ -44,13 +43,13 @@ INSERT INTO Filieres (filiereName)
 
 INSERT INTO Classes (filiereId, className, classAnnees) 
 	VALUES
-    (1,"X-MAS-GROUP-1-1", '2021-09-01'),
-    (1,"X-MAS-GROUP-1-1", '2022-09-01'),
-    (1,"X-MAS-GROUP-1-2", '2022-09-01'),
-    (2,"X-MAS-GROUP-1-1", '2022-09-01'),
-    (2,"X-MAS-GROUP-1-2", '2022-09-01'),
-    (3,"X-BAC-GROUP-1-1", '2022-09-01'),
-    (3,"X-BAC-GROUP-1-2",'2022-09-01');
+    (1,"X-MAS-DEV-1-1", '2021-09-01'),
+    (1,"X-MAS-DEV-1-1", '2022-09-01'),
+    (1,"X-MAS-DEV-1-2", '2022-09-01'),
+    (2,"X-MAS-CYBER-1-1", '2022-09-01'),
+    (2,"X-MAS-CYBER-1-2", '2022-09-01'),
+    (3,"X-BAC-DEV-1-1", '2022-09-01'),
+    (3,"X-BAC-DEV-1-2",'2022-09-01');
     
 INSERT INTO Users (userEmail, userName)
 	VALUES
