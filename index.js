@@ -153,7 +153,7 @@ var schema = buildSchema(`
     userId : Int!
     userEmail : String!
     userName : String!
-    eleves : eleves
+    eleves : [eleves]
     professeurs : professeurs
   }
   type usersArchive {

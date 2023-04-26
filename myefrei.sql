@@ -79,9 +79,10 @@ CREATE TABLE UsersArchive (
 
 CREATE TABLE Eleves (
 	eleveId INT AUTO_INCREMENT NOT NULL,
-    userId INT NOT NULL UNIQUE,
+    userId INT NOT NULL,
     classeId INT NOT NULL,
     PRIMARY KEY (eleveId),
+    UNIQUE KEY (userId, classeId),
     FOREIGN KEY (userId) REFERENCES Users(userId),
     FOREIGN KEY (classeId) REFERENCES Classes(classeId)
 );

@@ -44,12 +44,13 @@ model classesarchive {
 
 model eleves {
   eleveId  Int     @id @default(autoincrement())
-  userId   Int     @unique(map: "userId")
+  userId   Int
   classeId Int
   users    users   @relation(fields: [userId], references: [userId], onDelete: NoAction, onUpdate: NoAction, map: "eleves_ibfk_1")
   classes  classes @relation(fields: [classeId], references: [classeId], onDelete: NoAction, onUpdate: NoAction, map: "eleves_ibfk_2")
   notes    notes[]
 
+  @@unique([userId, classeId], map: "userId")
   @@index([classeId], map: "classeId")
 }
 
@@ -184,7 +185,7 @@ model users {
   userId      Int          @id @default(autoincrement())
   userEmail   String       @unique(map: "userEmail") @db.VarChar(45)
   userName    String       @db.VarChar(45)
-  eleves      eleves?
+  eleves      eleves[]
   professeurs professeurs?
 }
 
