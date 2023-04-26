@@ -136,6 +136,30 @@ query getProfesseursArchive {
   }
 }
 
+query getMatieres {
+	getMatieres {
+    matiereId,
+    matiereName,
+    filieres_has_matieres {
+      filieres{
+        filiereName
+      }
+    },
+    professeurs {
+      users {
+        userName
+      }
+    }
+  }
+}
+
+query getMatieresArchive {
+	getMatieresArchive {
+    matiereId,
+    matiereName
+  }
+}
+
 mutation insertCampus {
   insertCampus (value: { campusName : "Republique" adresse: "30-32 Av. de la République" }) {
     campusId,
@@ -189,6 +213,18 @@ mutation insertPofesseurs {
     professeurId,
     users {
       userName
+    }
+  }
+}
+
+mutation insertMatieres {
+  insertMatieres (value: {matiereName: "Nest.js", professeurId: 2}) {
+    matiereId,
+    matiereName,
+    professeurs {
+      users {
+        userName
+      }
     }
   }
 }
@@ -252,6 +288,18 @@ mutation updateProfesseurs {
   }
 }
 
+mutation updateMatieres {
+  updateMatieres (value: {matiereId:1, matiereName: "Angular"}) {
+    matiereId,
+    matiereName,
+    professeurs {
+      users {
+        userName
+      }
+    }
+  }
+}
+
 mutation deleteCampus {
   deleteCampus (campusId :1) {
     campusId
@@ -304,3 +352,15 @@ mutation deleteProfesseurs {
     }
   }
 }
+
+mutation deleteMatieres {
+  deleteMatieres (matiereId:1) {
+    matiereId,
+    matiereName,
+    professeurs {
+      users {
+        userName
+      }
+    }
+  }
+} 

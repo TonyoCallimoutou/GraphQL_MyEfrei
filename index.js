@@ -9,6 +9,7 @@ import { classesControlers } from './controlers/classes.js'
 import { usersControlers } from './controlers/users.js'
 import { elevesControlers } from './controlers/eleves.js'
 import { professeursControlers } from './controlers/professeurs.js'
+import { matieresControlers } from './controlers/matieres.js'
 
 var app = express()
 const dateScalar = new GraphQLScalarType({
@@ -236,6 +237,35 @@ var schema = buildSchema(`
   } 
 
 
+  type matieres {
+    matiereId : Int!
+    professeurId : Int
+    matiereName : String!
+    filieres_has_matieres : [filieres_has_matieres]
+    professeurs : professeurs
+    notes : [notes]
+    planning : [planning]
+  }
+  type matieresArchive {
+    matiereId : Int!
+    professeurId : Int
+    matiereName : String!
+    deleted_at : Date!
+  }
+  input matieresSelect {
+    matiereId : Int
+    professeurId : Int
+    matiereName : String
+  }
+  input matieresInsert {
+    professeurId : Int
+    matiereName : String!
+  }   
+  input matieresUpdate {
+    matiereId : Int!
+    professeurId : Int
+    matiereName : String
+  } 
 
 
   type filieres_has_matieres {
@@ -243,16 +273,6 @@ var schema = buildSchema(`
     matiereId : Int
     filieres : filieres 
     matieres : matieres
-  }
-
-  type matieres {
-    matiereId : Int
-    professeurId : Int
-    matiereName : String
-    filieres_has_matieres : [filieres_has_matieres]
-    professeurs : professeurs
-    notes : [notes]
-    planning : [planning]
   }
 
   type notes {
@@ -343,6 +363,14 @@ var schema = buildSchema(`
     "Permet de recuperer la liste des professeurs archivés"
 		getProfesseursArchive (value: professeursSelect): [professeursArchive]
 
+
+
+    "Permet de recuperer la liste des matieres"
+		getMatieres (value: matieresSelect): [matieres]
+
+    "Permet de recuperer la liste des matieres archivées"
+		getMatieresArchive (value: matieresSelect): [matieresArchive]
+
   }
 
   type Mutation {
@@ -422,6 +450,17 @@ var schema = buildSchema(`
 		"Permet de supprimer un professeur"
     deleteProfesseurs (professeurId: Int!) : professeurs
 
+
+
+    "Permet d'ajouter une matiere"
+    insertMatieres (value: matieresInsert!) : matieres
+
+		"Permet de modifier une matiere"
+    updateMatieres (value: matieresUpdate!) : matieres
+
+		"Permet de supprimer une matiere"
+    deleteMatieres (matiereId: Int!) : matieres
+
   }
 `)
 
@@ -437,6 +476,7 @@ var root = {
   ...usersControlers,
   ...elevesControlers,
   ...professeursControlers,
+  ...matieresControlers,
 	
 
 }
