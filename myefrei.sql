@@ -13,7 +13,7 @@ CREATE TABLE CampusArchive (
     campusId INT NOT NULL,
 	campusName VARCHAR(45) NOT NULL,
     adresse VARCHAR(45) NOT NULL,
-    deleted_at DATETIME DEFAULT NOW(),
+    deleted_at DATETIME NOT NULL DEFAULT NOW(),
     PRIMARY KEY (CampusId)
 );
 
@@ -29,7 +29,7 @@ CREATE TABLE SallesArchive (
 	salleId INT NOT NULL,
     campusId INT NOT NULL,
     salleName VARCHAR(45) NOT NULL,
-    deleted_at DATETIME DEFAULT NOW(),
+    deleted_at DATETIME NOT NULL DEFAULT NOW(),
     PRIMARY KEY (salleId)
 );
 
@@ -41,7 +41,7 @@ CREATE TABLE Filieres (
 CREATE TABLE FilieresArchive (
 	filiereId INT NOT NULL,
     filiereName VARCHAR(45) NOT NULL,
-    deleted_at DATETIME DEFAULT NOW(),
+    deleted_at DATETIME NOT NULL DEFAULT NOW(),
     PRIMARY KEY (filiereId)
 );
 
@@ -59,7 +59,7 @@ CREATE TABLE ClassesArchive (
 	filiereId INT NOT NULL,
     className VARCHAR(45) NOT NULL,
     classAnnees DATETIME NOT NULL,
-    deleted_at DATETIME DEFAULT NOW(),
+    deleted_at DATETIME NOT NULL DEFAULT NOW(),
     PRIMARY KEY (classeId)
 );
 
@@ -73,7 +73,7 @@ CREATE TABLE UsersArchive (
 	userId INT NOT NULL,
 	userEmail VARCHAR(45) NOT NULL,
     userName VARCHAR(45) NOT NULL,
-    deleted_at DATETIME DEFAULT NOW(),
+    deleted_at DATETIME NOT NULL DEFAULT NOW(),
     PRIMARY KEY (userId)
 );
 
@@ -91,7 +91,7 @@ CREATE TABLE ElevesArchive (
 	eleveId INT NOT NULL,
     userId INT NOT NULL,
     classeId INT NOT NULL,
-    deleted_at DATETIME DEFAULT NOW(),
+    deleted_at DATETIME NOT NULL DEFAULT NOW(),
     PRIMARY KEY (eleveId)
 );
 
@@ -107,7 +107,7 @@ CREATE TABLE ProfesseursArchive (
 	professeurId INT NOT NULL,
     userId INT NOT NULL,
     grade VARCHAR(45) NOT NULL,
-    deleted_at DATETIME DEFAULT NOW(),
+    deleted_at DATETIME NOT NULL DEFAULT NOW(),
     PRIMARY KEY (professeurId)
 );
 
@@ -123,7 +123,7 @@ CREATE TABLE MatieresArchive (
 	matiereId INT NOT NULL,
 	professeurId INT,
     matiereName VARCHAR(45) NOT NULL,
-    deleted_at DATETIME DEFAULT NOW(),
+    deleted_at DATETIME NOT NULL DEFAULT NOW(),
     PRIMARY KEY (matiereId)
 );
 
@@ -151,7 +151,7 @@ CREATE TABLE NotesArchive (
     eleveId INT NOT NULL,
     matiereId INT NOT NULL,
     note FLOAT NOT NULL,
-    deleted_at DATETIME DEFAULT NOW(),
+    deleted_at DATETIME NOT NULL DEFAULT NOW(),
     PRIMARY KEY (noteId)
 );
 
@@ -174,7 +174,7 @@ CREATE TABLE PlanningArchive (
     salleId INT NOT NULL,
     dateDebut DATETIME NOT NULL UNIQUE,
     dateFin DATETIME NOT NULL UNIQUE,
-    deleted_at DATETIME DEFAULT NOW(),
+    deleted_at DATETIME NOT NULL DEFAULT NOW(),
     PRIMARY KEY (planningId)
 );
 

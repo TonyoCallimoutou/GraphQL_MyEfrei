@@ -10,6 +10,7 @@ import { usersControlers } from './controlers/users.js'
 import { elevesControlers } from './controlers/eleves.js'
 import { professeursControlers } from './controlers/professeurs.js'
 import { matieresControlers } from './controlers/matieres.js'
+import { notesControlers } from './controlers/notes.js'
 
 var app = express()
 const dateScalar = new GraphQLScalarType({
@@ -275,13 +276,37 @@ var schema = buildSchema(`
     matieres : matieres
   }
 
+
   type notes {
+    noteId : Int!
+    eleveId : Int!
+    matiereId : Int!
+    note : Float!
+    eleves : eleves
+    matieres : matieres
+  }
+  type notesArchive {
+    noteId : Int!
+    eleveId : Int!
+    matiereId : Int!
+    note : Float!
+    deleted_at : Date!
+  }
+  input notesSelect {
     noteId : Int
     eleveId : Int
     matiereId : Int
+  }
+  input notesInsert {
+    eleveId : Int!
+    matiereId : Int!
+    note : Float!
+  }   
+  input notesUpdate {
+    noteId : Int!
+    eleveId : Int
+    matiereId : Int
     note : Float
-    eleves : eleves
-    matieres : matieres
   }
   
   type planning {
@@ -370,6 +395,14 @@ var schema = buildSchema(`
 
     "Permet de recuperer la liste des matieres archivées"
 		getMatieresArchive (value: matieresSelect): [matieresArchive]
+
+
+
+    "Permet de recuperer la liste des notes"
+		getNotes (value: notesSelect): [notes]
+
+    "Permet de recuperer la liste des notes archivées"
+		getNotesArchive (value: notesSelect): [notesArchive]
 
   }
 
@@ -461,6 +494,17 @@ var schema = buildSchema(`
 		"Permet de supprimer une matiere"
     deleteMatieres (matiereId: Int!) : matieres
 
+
+    
+    "Permet d'ajouter une notes"
+    insertNotes (value: notesInsert!) : notes
+
+		"Permet de modifier une notes"
+    updateNotes (value: notesUpdate!) : notes
+
+		"Permet de supprimer une notes"
+    deleteNotes (noteId: Int!) : notes
+
   }
 `)
 
@@ -477,7 +521,7 @@ var root = {
   ...elevesControlers,
   ...professeursControlers,
   ...matieresControlers,
-	
+	...notesControlers,
 
 }
 

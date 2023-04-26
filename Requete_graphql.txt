@@ -90,7 +90,10 @@ query getUsers {
 	getUsers {
     userId,
     userName,
-    userEmail
+    userEmail,
+    eleves {
+      classeId
+    }
   }
 }
 
@@ -160,6 +163,29 @@ query getMatieresArchive {
   }
 }
 
+query getNotes {
+	getNotes {
+    noteId,
+    note,
+    eleves {
+      users {
+        userName
+      }
+    },
+    matieres {
+      matiereName
+    }
+  }
+}
+
+query getNotesArchive {
+	getNotesArchive {
+    noteId,
+    note,
+    eleveId,
+  }
+}
+
 mutation insertCampus {
   insertCampus (value: { campusName : "Republique" adresse: "30-32 Av. de la République" }) {
     campusId,
@@ -225,6 +251,21 @@ mutation insertMatieres {
       users {
         userName
       }
+    }
+  }
+}
+
+mutation insertNotes {
+  insertNotes (value: {eleveId: 1, matiereId: 1, note: 18}) {
+    noteId,
+    note,
+    eleves {
+      users {
+        userName
+      }
+    },
+    matieres {
+      matiereName
     }
   }
 }
@@ -300,6 +341,21 @@ mutation updateMatieres {
   }
 }
 
+mutation updateNotes {
+  updateNotes (value: {noteId: 1, note: 19}) {
+    noteId,
+    note,
+    eleves {
+      users {
+        userName
+      }
+    },
+    matieres {
+      matiereName
+    }
+  }
+}
+
 mutation deleteCampus {
   deleteCampus (campusId :1) {
     campusId
@@ -361,6 +417,21 @@ mutation deleteMatieres {
       users {
         userName
       }
+    }
+  }
+}
+
+mutation deleteNotes {
+  deleteNotes (noteId: 1) {
+    noteId,
+    note,
+    eleves {
+      users {
+        userName
+      }
+    },
+    matieres {
+      matiereName
     }
   }
 }

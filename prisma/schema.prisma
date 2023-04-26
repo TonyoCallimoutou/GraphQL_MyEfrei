@@ -15,10 +15,10 @@ model campus {
 }
 
 model campusarchive {
-  campusId   Int       @id
-  campusName String    @db.VarChar(45)
-  adresse    String    @db.VarChar(45)
-  deleted_at DateTime? @default(now()) @db.DateTime(0)
+  campusId   Int      @id
+  campusName String   @db.VarChar(45)
+  adresse    String   @db.VarChar(45)
+  deleted_at DateTime @default(now()) @db.DateTime(0)
 }
 
 model classes {
@@ -35,11 +35,11 @@ model classes {
 }
 
 model classesarchive {
-  classeId    Int       @id
+  classeId    Int      @id
   filiereId   Int
-  className   String    @db.VarChar(45)
-  classAnnees DateTime  @db.DateTime(0)
-  deleted_at  DateTime? @default(now()) @db.DateTime(0)
+  className   String   @db.VarChar(45)
+  classAnnees DateTime @db.DateTime(0)
+  deleted_at  DateTime @default(now()) @db.DateTime(0)
 }
 
 model eleves {
@@ -55,10 +55,10 @@ model eleves {
 }
 
 model elevesarchive {
-  eleveId    Int       @id
+  eleveId    Int      @id
   userId     Int
   classeId   Int
-  deleted_at DateTime? @default(now()) @db.DateTime(0)
+  deleted_at DateTime @default(now()) @db.DateTime(0)
 }
 
 model filieres {
@@ -79,9 +79,9 @@ model filieres_has_matieres {
 }
 
 model filieresarchive {
-  filiereId   Int       @id
-  filiereName String    @db.VarChar(45)
-  deleted_at  DateTime? @default(now()) @db.DateTime(0)
+  filiereId   Int      @id
+  filiereName String   @db.VarChar(45)
+  deleted_at  DateTime @default(now()) @db.DateTime(0)
 }
 
 model matieres {
@@ -97,10 +97,10 @@ model matieres {
 }
 
 model matieresarchive {
-  matiereId    Int       @id
+  matiereId    Int      @id
   professeurId Int?
-  matiereName  String    @db.VarChar(45)
-  deleted_at   DateTime? @default(now()) @db.DateTime(0)
+  matiereName  String   @db.VarChar(45)
+  deleted_at   DateTime @default(now()) @db.DateTime(0)
 }
 
 model notes {
@@ -116,11 +116,11 @@ model notes {
 }
 
 model notesarchive {
-  noteId     Int       @id
+  noteId     Int      @id
   eleveId    Int
   matiereId  Int
-  note       Float     @db.Float
-  deleted_at DateTime? @default(now()) @db.DateTime(0)
+  note       Float    @db.Float
+  deleted_at DateTime @default(now()) @db.DateTime(0)
 }
 
 model planning {
@@ -140,13 +140,13 @@ model planning {
 }
 
 model planningarchive {
-  planningId Int       @id
+  planningId Int      @id
   classeId   Int
   matiereId  Int
   salleId    Int
-  dateDebut  DateTime  @unique(map: "dateDebut") @db.DateTime(0)
-  dateFin    DateTime  @unique(map: "dateFin") @db.DateTime(0)
-  deleted_at DateTime? @default(now()) @db.DateTime(0)
+  dateDebut  DateTime @unique(map: "dateDebut") @db.DateTime(0)
+  dateFin    DateTime @unique(map: "dateFin") @db.DateTime(0)
+  deleted_at DateTime @default(now()) @db.DateTime(0)
 }
 
 model professeurs {
@@ -158,10 +158,10 @@ model professeurs {
 }
 
 model professeursarchive {
-  professeurId Int       @id
+  professeurId Int      @id
   userId       Int
-  grade        String    @db.VarChar(45)
-  deleted_at   DateTime? @default(now()) @db.DateTime(0)
+  grade        String   @db.VarChar(45)
+  deleted_at   DateTime @default(now()) @db.DateTime(0)
 }
 
 model salles {
@@ -175,10 +175,10 @@ model salles {
 }
 
 model sallesarchive {
-  salleId    Int       @id
+  salleId    Int      @id
   campusId   Int
-  salleName  String    @db.VarChar(45)
-  deleted_at DateTime? @default(now()) @db.DateTime(0)
+  salleName  String   @db.VarChar(45)
+  deleted_at DateTime @default(now()) @db.DateTime(0)
 }
 
 model users {
@@ -190,8 +190,8 @@ model users {
 }
 
 model usersarchive {
-  userId     Int       @id
-  userEmail  String    @db.VarChar(45)
-  userName   String    @db.VarChar(45)
-  deleted_at DateTime? @default(now()) @db.DateTime(0)
+  userId     Int      @id
+  userEmail  String   @db.VarChar(45)
+  userName   String   @db.VarChar(45)
+  deleted_at DateTime @default(now()) @db.DateTime(0)
 }
