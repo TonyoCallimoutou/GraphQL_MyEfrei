@@ -1,0 +1,328 @@
+import { PrismaClient } from '@prisma/client'
+import express from "express"
+import { graphqlHTTP } from "express-graphql"
+import { buildSchema, GraphQLScalarType } from "graphql"
+import { campusControlers } from './controlers/campus.js'
+import { sallesControlers } from './controlers/salles.js'
+import { filieresControlers } from './controlers/filieres.js'
+import { classesControlers } from './controlers/classes.js'
+
+var app = express()
+const dateScalar = new GraphQLScalarType({
+  name: 'Date',
+  serialize(value) {
+    return value.toISOString();
+  },
+  parseValue(value) {
+    return new Date(value);
+  },
+  parseLiteral(ast) {
+    if (ast.kind === Kind.STRING) {
+      return new Date(ast.value);
+    }
+    return null;
+  },
+});
+
+
+// Construct a schema, using GraphQL schema language
+var schema = buildSchema(`
+	scalar Date
+
+  type campus {
+    campusId : Int
+    campusName : String 
+    adresse :  String
+    salles : [salles]
+  }
+  type campusArchive {
+    campusId : Int
+    campusName : String 
+    adresse :  String
+    deleted_at : Date
+  }
+  input campusSelect {
+    campusId : Int
+    campusName : String 
+    adresse :  String
+  }
+  input campusInsert {
+    campusName : String! 
+    adresse :  String!
+  }   
+  input campusUpdate {
+    campusId : Int!
+    campusName : String
+    adresse :  String
+  } 
+
+  type salles {
+    salleId : Int
+    campusId : Int
+    salleName : String
+    planning : [planning]
+    campus : campus
+  }
+  type sallesArchive {
+    salleId : Int
+    campusId : Int
+    salleName : String
+    deleted_at : Date
+  }
+  input sallesSelect {
+    salleId : Int
+    campusId : Int
+    salleName : String
+  }
+  input sallesInsert {
+    campusId : Int!
+    salleName : String!
+  }   
+  input sallesUpdate {
+    salleId : Int!
+    campusId : Int
+    salleName : String
+  }
+
+  type filieres {
+    filiereId : Int
+    filiereName : String
+    classes : [classes]
+    filieres_has_matieres : [filieres_has_matieres]
+  }
+  type filieresArchive {
+    filiereId : Int
+    filiereName : String
+    deleted_at : Date
+  }
+  input filieresSelect {
+    filiereId : Int
+    filiereName : String
+  }
+  input filieresInsert {
+    filiereName : String!
+  }   
+  input filieresUpdate {
+    filiereId : Int!
+    filiereName : String!
+  }
+
+
+  type classes {
+    classeId : Int
+    filiereId : Int
+    className : String
+    classAnnees : Date
+    filieres : filieres
+    eleves : [eleves]
+    planning : [planning]
+  }
+  type classesArchive {
+    classeId : Int
+    filiereId : Int
+    className : String
+    classAnnees : Date
+    deleted_at : Date
+  }
+  input classesSelect {
+    classeId : Int
+    filiereId : Int
+    className : String
+    classAnnees : Date
+  }
+  input classesInsert {
+    filiereId : Int!
+    className : String!
+    classAnnees : Date!
+  }   
+  input classesUpdate {
+    classeId : Int!
+    filiereId : Int
+    className : String
+    classAnnees : Date
+  } 
+
+  type eleves {
+    eleveId : Int
+    userId : Int
+    classeId : Int
+    users : users
+    classes : classes
+    notes :[notes]
+  }
+
+  type filieres_has_matieres {
+    filiereId : Int
+    matiereId : Int
+    filieres : filieres 
+    matieres : matieres
+  }
+
+  type matieres {
+    matiereId : Int
+    professeurId : Int
+    matiereName : String
+    filieres_has_matieres : [filieres_has_matieres]
+    professeurs : professeurs
+    notes : [notes]
+    planning : [planning]
+  }
+
+  type notes {
+    noteId : Int
+    eleveId : Int
+    matiereId : Int
+    note : Float
+    eleves : eleves
+    matieres : matieres
+  }
+  
+  type planning {
+    planningId : Int
+    classeId : Int
+    matiereId : Int
+    salleId : Int
+    dateDebut : Date
+    dateFin : Date
+    classes : classes 
+    matieres : matieres 
+    salles : salles 
+  }
+	input planningSelect {
+    classeId : Int!
+    dateDebut :  Date!
+    dateFin :  Date!
+  }
+  input planningInput {
+    classeId : Int!
+    salleId : Int!
+    dateDebut : Date!
+    dateFin : Date!
+  }   
+  
+  type professeurs {
+    professeurId : Int
+    userId : Int
+    grade : String
+    matieres : [matieres]
+    users : [users]
+  }
+
+
+  type users {
+    userId : Int
+    userEmail : String
+    userName : String
+    eleves : [eleves]
+    professeurs : [professeurs]
+  }
+
+
+  type Query {
+		
+		"Permet de recuperer la liste des campus"
+		getCampus (value: campusSelect): [campus]
+
+    "Permet de recuperer la liste des campus archivés"
+		getCampusArchive (value: campusSelect): [campusArchive]
+
+
+
+    "Permet de recuperer la liste des salles"
+		getSalles (value: sallesSelect): [salles]
+
+    "Permet de recuperer la liste des salles archivées"
+		getSallesArchive (value: sallesSelect): [sallesArchive]
+
+
+
+    "Permet de recuperer la liste des filieres"
+		getFilieres (value: filieresSelect): [filieres]
+
+    "Permet de recuperer la liste des salles archivées"
+		getFilieresArchive (value: filieresSelect): [filieresArchive]
+
+
+
+    "Permet de recuperer la liste des classes"
+		getClasses (value: classesSelect): [classes]
+
+    "Permet de recuperer la liste des classes archivées"
+		getClassesArchive (value: classesSelect): [classesArchive]
+
+  }
+
+  type Mutation {
+
+    "Permet d'ajouter un campus"
+    insertCampus (value: campusInsert) : campus
+
+		"Permet de modifier un campus"
+    updateCampus (value: campusUpdate) : campus
+
+		"Permet de supprimer un campus"
+    deleteCampus (campusId: Int) : campus
+
+
+
+    "Permet d'ajouter une salle"
+    insertSalles (value: sallesInsert) : salles
+
+		"Permet de modifier une salle"
+    updateSalles (value: sallesUpdate) : salles
+
+		"Permet de supprimer une salle"
+    deleteSalles (sallesId: Int) : salles
+
+
+
+    "Permet d'ajouter une filiere"
+    insertFilieres (value: filieresInsert) : filieres
+
+		"Permet de modifier une filiere"
+    updateFilieres (value: filieresUpdate) : filieres
+
+		"Permet de supprimer une filiere"
+    deleteFilieres (filiereId: Int) : filieres
+
+
+
+    "Permet d'ajouter une classe"
+    insertClasses (value: classesInsert) : classes
+
+		"Permet de modifier une filiere"
+    updateClasses (value: classesUpdate) : classes
+
+		"Permet de supprimer une filiere"
+    deleteClasses (classeId: Int) : classes
+
+  }
+`)
+
+
+
+// The root provides a resolver function for each API endpoint
+var root = {
+
+	...campusControlers,
+  ...sallesControlers,
+  ...filieresControlers,
+  ...classesControlers
+	
+
+}
+
+
+app.use(
+  "/graphql",
+  graphqlHTTP({
+    schema: schema,
+    rootValue: root,
+    graphiql: true,
+  })
+)
+
+
+app.listen(3200, ()=>{
+  console.log("coucou")
+})

@@ -1,0 +1,198 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model campus {
+  campusId   Int      @id @default(autoincrement())
+  campusName String   @db.VarChar(45)
+  adresse    String   @db.VarChar(45)
+  salles     salles[]
+}
+
+model campusarchive {
+  campusId   Int       @id
+  campusName String    @db.VarChar(45)
+  adresse    String    @db.VarChar(45)
+  deleted_at DateTime? @default(now()) @db.DateTime(0)
+}
+
+model classes {
+  classeId    Int        @id @default(autoincrement())
+  filiereId   Int
+  className   String     @db.VarChar(45)
+  classAnnees DateTime   @db.Date
+  filieres    filieres   @relation(fields: [filiereId], references: [filiereId], onDelete: NoAction, onUpdate: NoAction, map: "classes_ibfk_1")
+  eleves      eleves[]
+  planning    planning[]
+
+  @@index([filiereId], map: "filiereId")
+}
+
+model classesarchive {
+  classeId    Int       @id
+  filiereId   Int
+  className   String    @db.VarChar(45)
+  classAnnees DateTime  @db.Date
+  deleted_at  DateTime? @default(now()) @db.DateTime(0)
+}
+
+model eleves {
+  eleveId  Int     @id @default(autoincrement())
+  userId   Int
+  classeId Int
+  users    users   @relation(fields: [userId], references: [userId], onDelete: NoAction, onUpdate: NoAction, map: "eleves_ibfk_1")
+  classes  classes @relation(fields: [classeId], references: [classeId], onDelete: NoAction, onUpdate: NoAction, map: "eleves_ibfk_2")
+  notes    notes[]
+
+  @@index([classeId], map: "classeId")
+  @@index([userId], map: "userId")
+}
+
+model elevesarchive {
+  eleveId    Int       @id
+  userId     Int
+  classeId   Int
+  deleted_at DateTime? @default(now()) @db.DateTime(0)
+}
+
+model filieres {
+  filiereId             Int                     @id @default(autoincrement())
+  filiereName           String                  @db.VarChar(45)
+  classes               classes[]
+  filieres_has_matieres filieres_has_matieres[]
+}
+
+model filieres_has_matieres {
+  filiereId Int
+  matiereId Int
+  filieres  filieres @relation(fields: [filiereId], references: [filiereId], onDelete: Cascade, onUpdate: NoAction, map: "filieres_has_matieres_ibfk_1")
+  matieres  matieres @relation(fields: [matiereId], references: [matiereId], onDelete: Cascade, onUpdate: NoAction, map: "filieres_has_matieres_ibfk_2")
+
+  @@id([filiereId, matiereId])
+  @@index([matiereId], map: "matiereId")
+}
+
+model filieresarchive {
+  filiereId   Int       @id
+  filiereName String    @db.VarChar(45)
+  deleted_at  DateTime? @default(now()) @db.DateTime(0)
+}
+
+model matieres {
+  matiereId             Int                     @id @default(autoincrement())
+  professeurId          Int?
+  matiereName           String                  @db.VarChar(45)
+  filieres_has_matieres filieres_has_matieres[]
+  professeurs           professeurs?            @relation(fields: [professeurId], references: [professeurId], onUpdate: NoAction, map: "matieres_ibfk_1")
+  notes                 notes[]
+  planning              planning[]
+
+  @@index([professeurId], map: "professeurId")
+}
+
+model matieresarchive {
+  matiereId    Int       @id
+  professeurId Int?
+  matiereName  String    @db.VarChar(45)
+  deleted_at   DateTime? @default(now()) @db.DateTime(0)
+}
+
+model notes {
+  noteId    Int      @id @default(autoincrement())
+  eleveId   Int
+  matiereId Int
+  note      Float    @db.Float
+  eleves    eleves   @relation(fields: [eleveId], references: [eleveId], onDelete: NoAction, onUpdate: NoAction, map: "notes_ibfk_1")
+  matieres  matieres @relation(fields: [matiereId], references: [matiereId], onDelete: NoAction, onUpdate: NoAction, map: "notes_ibfk_2")
+
+  @@index([eleveId], map: "eleveId")
+  @@index([matiereId], map: "matiereId")
+}
+
+model notesarchive {
+  noteId     Int       @id
+  eleveId    Int
+  matiereId  Int
+  note       Float     @db.Float
+  deleted_at DateTime? @default(now()) @db.DateTime(0)
+}
+
+model planning {
+  planningId Int      @id @default(autoincrement())
+  classeId   Int
+  matiereId  Int
+  salleId    Int
+  dateDebut  DateTime @unique(map: "dateDebut") @db.DateTime(0)
+  dateFin    DateTime @unique(map: "dateFin") @db.DateTime(0)
+  classes    classes  @relation(fields: [classeId], references: [classeId], onDelete: NoAction, onUpdate: NoAction, map: "planning_ibfk_1")
+  matieres   matieres @relation(fields: [matiereId], references: [matiereId], onDelete: NoAction, onUpdate: NoAction, map: "planning_ibfk_2")
+  salles     salles   @relation(fields: [salleId], references: [salleId], onDelete: NoAction, onUpdate: NoAction, map: "planning_ibfk_3")
+
+  @@index([classeId], map: "classeId")
+  @@index([matiereId], map: "matiereId")
+  @@index([salleId], map: "salleId")
+}
+
+model planningarchive {
+  planningId Int       @id
+  classeId   Int
+  matiereId  Int
+  salleId    Int
+  dateDebut  DateTime  @unique(map: "dateDebut") @db.DateTime(0)
+  dateFin    DateTime  @unique(map: "dateFin") @db.DateTime(0)
+  deleted_at DateTime? @default(now()) @db.DateTime(0)
+}
+
+model professeurs {
+  professeurId Int        @id @default(autoincrement())
+  userId       Int
+  grade        String     @db.VarChar(45)
+  matieres     matieres[]
+  users        users      @relation(fields: [userId], references: [userId], onDelete: NoAction, onUpdate: NoAction, map: "professeurs_ibfk_1")
+
+  @@index([userId], map: "userId")
+}
+
+model professeursarchive {
+  professeurId Int       @id @default(autoincrement())
+  userId       Int
+  grade        String    @db.VarChar(45)
+  deleted_at   DateTime? @default(now()) @db.DateTime(0)
+}
+
+model salles {
+  salleId   Int        @id @default(autoincrement())
+  campusId  Int
+  salleName String     @db.VarChar(45)
+  planning  planning[]
+  campus    campus     @relation(fields: [campusId], references: [campusId], onDelete: NoAction, onUpdate: NoAction, map: "salles_ibfk_1")
+
+  @@index([campusId], map: "campusId")
+}
+
+model sallesarchive {
+  salleId    Int       @id
+  campusId   Int
+  salleName  String    @db.VarChar(45)
+  deleted_at DateTime? @default(now()) @db.DateTime(0)
+}
+
+model users {
+  userId      Int           @id @default(autoincrement())
+  userEmail   String        @unique(map: "userEmail") @db.VarChar(45)
+  userName    String        @db.VarChar(45)
+  eleves      eleves[]
+  professeurs professeurs[]
+}
+
+model usersarchive {
+  userId     Int       @id
+  userEmail  String    @unique(map: "userEmail") @db.VarChar(45)
+  userName   String    @db.VarChar(45)
+  deleted_at DateTime? @default(now()) @db.DateTime(0)
+}
