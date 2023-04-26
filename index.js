@@ -8,6 +8,7 @@ import { filieresControlers } from './controlers/filieres.js'
 import { classesControlers } from './controlers/classes.js'
 import { usersControlers } from './controlers/users.js'
 import { elevesControlers } from './controlers/eleves.js'
+import { professeursControlers } from './controlers/professeurs.js'
 
 var app = express()
 const dateScalar = new GraphQLScalarType({
@@ -58,6 +59,7 @@ var schema = buildSchema(`
     adresse :  String
   } 
 
+
   type salles {
     salleId : Int!
     campusId : Int!
@@ -85,6 +87,7 @@ var schema = buildSchema(`
     campusId : Int
     salleName : String
   }
+
 
   type filieres {
     filiereId : Int!
@@ -173,6 +176,7 @@ var schema = buildSchema(`
     userName : String
   } 
 
+
   type eleves {
     eleveId : Int!
     userId : Int!
@@ -201,6 +205,38 @@ var schema = buildSchema(`
     userId : Int
     classeId : Int
   } 
+
+
+  type professeurs {
+    professeurId : Int!
+    userId : Int!
+    grade : String!
+    matieres : [matieres]
+    users : users
+  }
+  type professeursArchive {
+    professeurId : Int!
+    userId : Int!
+    grade : String!
+    deleted_at : Date!
+  }
+  input professeursSelect {
+    professeurId : Int
+    userId : Int
+    grade : String
+  }
+  input professeursInsert {
+    userId : Int!
+    grade : String!
+  }   
+  input professeursUpdate {
+    professeurId : Int!
+    userId : Int
+    grade : String
+  } 
+
+
+
 
   type filieres_has_matieres {
     filiereId : Int
@@ -250,15 +286,6 @@ var schema = buildSchema(`
     dateDebut : Date!
     dateFin : Date!
   }   
-  
-  type professeurs {
-    professeurId : Int
-    userId : Int
-    grade : String
-    matieres : [matieres]
-    users : [users]
-  }
-
 
   type Query {
 		
@@ -292,17 +319,29 @@ var schema = buildSchema(`
     "Permet de recuperer la liste des classes archivées"
 		getClassesArchive (value: classesSelect): [classesArchive]
 
+
+    
     "Permet de recuperer la liste des utilisateurs"
 		getUsers (value: usersSelect): [users]
 
     "Permet de recuperer la liste des utilisateurs archivés"
 		getUsersArchive (value: usersSelect): [usersArchive]
 
+
+
     "Permet de recuperer la liste des eleves"
 		getEleves (value: elevesSelect): [eleves]
 
-    "Permet de recuperer la liste des utilisateurs archivés"
+    "Permet de recuperer la liste des eleves archivés"
 		getElevesArchive (value: elevesSelect): [elevesArchive]
+
+
+
+    "Permet de recuperer la liste des professeurs"
+		getProfesseurs (value: professeursSelect): [professeurs]
+
+    "Permet de recuperer la liste des professeurs archivés"
+		getProfesseursArchive (value: professeursSelect): [professeursArchive]
 
   }
 
@@ -372,6 +411,17 @@ var schema = buildSchema(`
 		"Permet de supprimer un eleve"
     deleteEleves (eleveId: Int!) : eleves
 
+
+
+    "Permet d'ajouter un professeur"
+    insertProfesseurs (value: professeursInsert!) : professeurs
+
+		"Permet de modifier un professeur"
+    updateProfesseurs (value: professeursUpdate!) : professeurs
+
+		"Permet de supprimer un professeur"
+    deleteProfesseurs (professeurId: Int!) : professeurs
+
   }
 `)
 
@@ -385,7 +435,8 @@ var root = {
   ...filieresControlers,
   ...classesControlers,
   ...usersControlers,
-  ...elevesControlers
+  ...elevesControlers,
+  ...professeursControlers,
 	
 
 }

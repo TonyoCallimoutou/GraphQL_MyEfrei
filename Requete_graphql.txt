@@ -118,6 +118,24 @@ query getElevesArchive {
   }
 }
 
+query getProfesseurs {
+	getProfesseurs {
+    professeurId,
+    grade,
+    users {
+      userName
+    }
+  }
+}
+
+query getProfesseursArchive {
+	getProfesseursArchive {
+    professeurId,
+    grade,
+    userId
+  }
+}
+
 mutation insertCampus {
   insertCampus (value: { campusName : "Republique" adresse: "30-32 Av. de la République" }) {
     campusId,
@@ -160,6 +178,15 @@ mutation insertUsers {
 mutation insertEleves {
   insertEleves (value: {userId: 1, classeId:1}) {
     eleveId,
+    users {
+      userName
+    }
+  }
+}
+
+mutation insertPofesseurs {
+  insertProfesseurs (value: {userId: 1, grade: "A1"}) {
+    professeurId,
     users {
       userName
     }
@@ -216,6 +243,14 @@ mutation updateEleves {
   }
 }
 
+mutation updateProfesseurs {
+  updateProfesseurs (value: { professeurId: 1, grade:"A2"}) {
+    professeurId,
+    users {
+      userName
+    }
+  }
+}
 
 mutation deleteCampus {
   deleteCampus (campusId :1) {
@@ -255,6 +290,15 @@ mutation deleteUser {
 mutation deleteEleves {
   deleteEleves (eleveId: 1) {
     eleveId,
+    users {
+      userName
+    }
+  }
+}
+
+mutation deleteProfesseurs {
+  deleteProfesseurs (professeurId: 1) {
+    professeurId,
     users {
       userName
     }
