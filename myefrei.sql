@@ -4,8 +4,8 @@ use myefrei;
 
 CREATE TABLE Campus (
     campusId INT AUTO_INCREMENT NOT NULL,
-	campusName VARCHAR(45) NOT NULL,
-    adresse VARCHAR(45) NOT NULL,
+	campusName VARCHAR(45) NOT NULL UNIQUE,
+    adresse VARCHAR(45) NOT NULL UNIQUE,
     PRIMARY KEY (CampusId)
 );
 
@@ -22,6 +22,7 @@ CREATE TABLE Salles (
     campusId INT NOT NULL,
     salleName VARCHAR(45) NOT NULL,
     PRIMARY KEY (salleId),
+    UNIQUE KEY (campusId, salleName),
     FOREIGN KEY (campusId) REFERENCES Campus(campusId)
 );
 CREATE TABLE SallesArchive (
@@ -34,7 +35,7 @@ CREATE TABLE SallesArchive (
 
 CREATE TABLE Filieres (
 	filiereId INT AUTO_INCREMENT NOT NULL,
-    filiereName VARCHAR(45) NOT NULL,
+    filiereName VARCHAR(45) NOT NULL UNIQUE,
     PRIMARY KEY (filiereId)
 );
 CREATE TABLE FilieresArchive (
@@ -50,6 +51,7 @@ CREATE TABLE Classes (
     className VARCHAR(45) NOT NULL,
     classAnnees DATETIME NOT NULL,
     PRIMARY KEY (classeId),
+    UNIQUE KEY (className, classAnnees),
     FOREIGN KEY (filiereId) REFERENCES Filieres(filiereId)
 );
 CREATE TABLE ClassesArchive (
@@ -69,7 +71,7 @@ CREATE TABLE Users (
 );
 CREATE TABLE UsersArchive (
 	userId INT NOT NULL,
-	userEmail VARCHAR(45) NOT NULL UNIQUE,
+	userEmail VARCHAR(45) NOT NULL,
     userName VARCHAR(45) NOT NULL,
     deleted_at DATETIME DEFAULT NOW(),
     PRIMARY KEY (userId)
@@ -77,12 +79,13 @@ CREATE TABLE UsersArchive (
 
 CREATE TABLE Eleves (
 	eleveId INT AUTO_INCREMENT NOT NULL,
-    userId INT NOT NULL,
+    userId INT NOT NULL UNIQUE,
     classeId INT NOT NULL,
     PRIMARY KEY (eleveId),
     FOREIGN KEY (userId) REFERENCES Users(userId),
     FOREIGN KEY (classeId) REFERENCES Classes(classeId)
 );
+
 CREATE TABLE ElevesArchive (
 	eleveId INT NOT NULL,
     userId INT NOT NULL,
@@ -93,13 +96,14 @@ CREATE TABLE ElevesArchive (
 
 CREATE TABLE Professeurs (
 	professeurId INT AUTO_INCREMENT NOT NULL,
-    userId INT NOT NULL,
+    userId INT NOT NULL UNIQUE,
     grade VARCHAR(45) NOT NULL,
     PRIMARY KEY (professeurId),
     FOREIGN KEY (userId) REFERENCES Users(userId)
 );
+
 CREATE TABLE ProfesseursArchive (
-	professeurId INT AUTO_INCREMENT NOT NULL,
+	professeurId INT NOT NULL,
     userId INT NOT NULL,
     grade VARCHAR(45) NOT NULL,
     deleted_at DATETIME DEFAULT NOW(),
@@ -111,6 +115,7 @@ CREATE TABLE Matieres (
 	professeurId INT,
     matiereName VARCHAR(45) NOT NULL,
     PRIMARY KEY (matiereId),
+    UNIQUE KEY (professeurId, matiereName),
     FOREIGN KEY (professeurId) REFERENCES Professeurs(professeurId) ON DELETE SET NULL
 );
 CREATE TABLE MatieresArchive (

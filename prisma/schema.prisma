@@ -9,8 +9,8 @@ datasource db {
 
 model campus {
   campusId   Int      @id @default(autoincrement())
-  campusName String   @db.VarChar(45)
-  adresse    String   @db.VarChar(45)
+  campusName String   @unique(map: "campusName") @db.VarChar(45)
+  adresse    String   @unique(map: "adresse") @db.VarChar(45)
   salles     salles[]
 }
 
@@ -25,11 +25,12 @@ model classes {
   classeId    Int        @id @default(autoincrement())
   filiereId   Int
   className   String     @db.VarChar(45)
-  classAnnees DateTime   @db.Date
+  classAnnees DateTime   @db.DateTime(0)
   filieres    filieres   @relation(fields: [filiereId], references: [filiereId], onDelete: NoAction, onUpdate: NoAction, map: "classes_ibfk_1")
   eleves      eleves[]
   planning    planning[]
 
+  @@unique([className, classAnnees], map: "className")
   @@index([filiereId], map: "filiereId")
 }
 
@@ -37,20 +38,19 @@ model classesarchive {
   classeId    Int       @id
   filiereId   Int
   className   String    @db.VarChar(45)
-  classAnnees DateTime  @db.Date
+  classAnnees DateTime  @db.DateTime(0)
   deleted_at  DateTime? @default(now()) @db.DateTime(0)
 }
 
 model eleves {
   eleveId  Int     @id @default(autoincrement())
-  userId   Int
+  userId   Int     @unique(map: "userId")
   classeId Int
   users    users   @relation(fields: [userId], references: [userId], onDelete: NoAction, onUpdate: NoAction, map: "eleves_ibfk_1")
   classes  classes @relation(fields: [classeId], references: [classeId], onDelete: NoAction, onUpdate: NoAction, map: "eleves_ibfk_2")
   notes    notes[]
 
   @@index([classeId], map: "classeId")
-  @@index([userId], map: "userId")
 }
 
 model elevesarchive {
@@ -62,7 +62,7 @@ model elevesarchive {
 
 model filieres {
   filiereId             Int                     @id @default(autoincrement())
-  filiereName           String                  @db.VarChar(45)
+  filiereName           String                  @unique(map: "filiereName") @db.VarChar(45)
   classes               classes[]
   filieres_has_matieres filieres_has_matieres[]
 }
@@ -92,7 +92,7 @@ model matieres {
   notes                 notes[]
   planning              planning[]
 
-  @@index([professeurId], map: "professeurId")
+  @@unique([professeurId, matiereName], map: "professeurId")
 }
 
 model matieresarchive {
@@ -150,16 +150,14 @@ model planningarchive {
 
 model professeurs {
   professeurId Int        @id @default(autoincrement())
-  userId       Int
+  userId       Int        @unique(map: "userId")
   grade        String     @db.VarChar(45)
   matieres     matieres[]
   users        users      @relation(fields: [userId], references: [userId], onDelete: NoAction, onUpdate: NoAction, map: "professeurs_ibfk_1")
-
-  @@index([userId], map: "userId")
 }
 
 model professeursarchive {
-  professeurId Int       @id @default(autoincrement())
+  professeurId Int       @id
   userId       Int
   grade        String    @db.VarChar(45)
   deleted_at   DateTime? @default(now()) @db.DateTime(0)
@@ -172,7 +170,7 @@ model salles {
   planning  planning[]
   campus    campus     @relation(fields: [campusId], references: [campusId], onDelete: NoAction, onUpdate: NoAction, map: "salles_ibfk_1")
 
-  @@index([campusId], map: "campusId")
+  @@unique([campusId, salleName], map: "campusId")
 }
 
 model sallesarchive {
@@ -183,16 +181,16 @@ model sallesarchive {
 }
 
 model users {
-  userId      Int           @id @default(autoincrement())
-  userEmail   String        @unique(map: "userEmail") @db.VarChar(45)
-  userName    String        @db.VarChar(45)
-  eleves      eleves[]
-  professeurs professeurs[]
+  userId      Int          @id @default(autoincrement())
+  userEmail   String       @unique(map: "userEmail") @db.VarChar(45)
+  userName    String       @db.VarChar(45)
+  eleves      eleves?
+  professeurs professeurs?
 }
 
 model usersarchive {
   userId     Int       @id
-  userEmail  String    @unique(map: "userEmail") @db.VarChar(45)
+  userEmail  String    @db.VarChar(45)
   userName   String    @db.VarChar(45)
   deleted_at DateTime? @default(now()) @db.DateTime(0)
 }

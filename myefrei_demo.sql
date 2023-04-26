@@ -70,19 +70,16 @@ INSERT INTO Eleves (userId, classeId)
     (3,2),
     (4,1);
     
-    
 INSERT INTO Professeurs (userId, grade)
 	VALUES
     (5, "niveau 2"),
     (6, "niveau 2");
     
-
-    
 INSERT INTO Matieres (professeurId, matiereName)
 	VALUES
     (1, "GraphQL"),
     (2, "Communication"),
-    (2, "Anglais");
+    (2, "Anglais");	
     
 INSERT INTO Filieres_has_matieres (filiereId, matiereId)
 	VALUES

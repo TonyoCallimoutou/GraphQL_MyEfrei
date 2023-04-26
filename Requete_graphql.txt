@@ -218,7 +218,7 @@ mutation insertPofesseurs {
 }
 
 mutation insertMatieres {
-  insertMatieres (value: {matiereName: "Nest.js", professeurId: 2}) {
+  insertMatieres (value: {matiereName: "Nest.js", professeurId: 1}) {
     matiereId,
     matiereName,
     professeurs {
@@ -363,4 +363,4 @@ mutation deleteMatieres {
       }
     }
   }
-} 
+}
