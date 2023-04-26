@@ -8,12 +8,12 @@ export const filieresControlers = {
 		return await prisma.filieres.findMany({
 			where : value,
 			include: {
-                classes: true,
+				classes: true,
 				filieres_has_matieres: {
-                    include :{
-                        matieres: true
-                    }
-                }
+					include :{
+						matieres: true
+					}
+				}
 			}
 		})
 	},
@@ -37,12 +37,12 @@ export const filieresControlers = {
 			},
 			data : value,
 			include: {
-                classes: true,
+				classes: true,
 				filieres_has_matieres: {
-                    include :{
-                        matieres: true
-                    }
-                }
+					include :{
+						matieres: true
+					}
+				}
 			}
 		})
 	},
@@ -53,12 +53,12 @@ export const filieresControlers = {
 				filiereId: filiereId
 			},
 			include: {
-                classes: true,
+				classes: true,
 				filieres_has_matieres: {
-                    include :{
-                        matieres: true
-                    }
-                }
+					include :{
+						matieres: true
+					}
+				}
 			}
 		})
 	}

@@ -8,7 +8,7 @@ export const sallesControlers = {
 		return await prisma.salles.findMany({
 			where : value,
 			include: {
-                campus: true,
+				campus: true,
 				planning: true,
 			}
 		})
@@ -23,10 +23,6 @@ export const sallesControlers = {
 	insertSalles : async ({value}) => {
 		return await prisma.salles.create({
 			data : value,
-			include: {
-                campus: true,
-				planning: true,
-			}
 		})
 	},
 
@@ -36,8 +32,8 @@ export const sallesControlers = {
 				salleId : value.salleId
 			},
 			data : value,
-            include: {
-                campus: true,
+			include: {
+				campus: true,
 				planning: true,
 			}
 		})
@@ -48,8 +44,8 @@ export const sallesControlers = {
 			where: {
 				salleId: salleId
 			},
-            include: {
-                campus: true,
+			include: {
+				campus: true,
 				planning: true,
 			}
 		})

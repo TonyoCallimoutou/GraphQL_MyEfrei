@@ -8,9 +8,9 @@ export const classesControlers = {
 		return await prisma.classes.findMany({
 			where : value,
 			include: {
-                filieres: true,
-                eleves: true,
-                planning: true,
+				filieres: true,
+				eleves: true,
+				planning: true,
 			}
 		})
 	},
@@ -34,9 +34,9 @@ export const classesControlers = {
 			},
 			data : value,
 			include: {
-                filieres: true,
-                eleves: true,
-                planning: true,
+				filieres: true,
+				eleves: true,
+				planning: true,
 			}
 		})
 	},
@@ -47,9 +47,9 @@ export const classesControlers = {
 				classeId: classeId
 			},
 			include: {
-                filieres: true,
-                eleves: true,
-                planning: true,
+				filieres: true,
+				eleves: true,
+				planning: true,
 			}
 		})
 	}

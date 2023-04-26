@@ -1,0 +1,217 @@
+
+query getCampus {
+  getCampus {
+    campusId,
+    campusName
+    adresse,
+    salles {
+      salleName
+    }
+  }
+}	
+
+query getCampusArchive {
+  getCampusArchive {
+    campusId,
+    campusName
+    adresse,
+    deleted_at
+  }
+}	
+
+query getSalles {
+	getSalles {
+    salleId,
+    salleName,
+  	campus {
+      campusId,
+      campusName
+    }
+    planning {
+      planningId
+    }
+  }
+}
+
+query getSallesArchive {
+	getSallesArchive {
+    salleId,
+    salleName,
+    deleted_at
+  }
+}
+
+query getFiliere {
+	getFilieres {
+    filiereName,
+    classes {
+      className,
+      classAnnees
+    },
+    filieres_has_matieres {
+      matieres {
+        matiereName
+      }
+    }
+  }
+}
+
+query getFiliereArchive {
+	getFilieresArchive {
+    filiereId,
+    filiereName,
+  }
+}
+
+query getClasses {
+	getClasses {
+    classeId,
+    className,
+    classAnnees,
+    filieres {
+      filiereName
+    }
+  }
+}
+
+query getClassesArchive {
+	getClassesArchive {
+    classeId,
+    className,
+    classAnnees,
+  }
+}
+
+query getUsers {
+	getUsers {
+    userId,
+    userName,
+    userEmail
+  }
+}
+
+query getUsersArchive {
+	getUsersArchive {
+    userId,
+    userName,
+    userEmail
+  }
+}
+
+mutation insertCampus {
+  insertCampus (value: { campusName : "Republique" adresse: "30-32 Av. de la République" }) {
+    campusId,
+    campusName,
+    adresse
+  }
+}
+
+mutation insertSalles {
+  insertSalles (value: { campusId: 1, salleName: "B003"}) {
+    salleId,
+    salleName,
+    campus {
+      campusName
+    }
+  }
+}
+
+mutation insertFilieres {
+  insertFilieres (value: {filiereName: "DEV MANAGER FULL STACK"}) {
+    filiereId,
+    filiereName
+  }
+}
+
+mutation insertClasses {
+  insertClasses (value: {filiereId: 1, className : "X-MAS-GROUP-1-4", classAnnees: "2022-09-01T00:00:00.000Z"}) {
+    classeId,
+    className,
+    classAnnees
+  }
+}
+
+mutation insertUsers {
+  insertUsers (value: {userName: "TONYO", userEmail:"tonyo.email.fr"}) {
+    userId,
+    userName,
+    userEmail
+  }
+}
+
+mutation updateCampus {
+  updateCampus ( value : { campusId: 1, adresse: "30-32 Av. de la République, 94800 Villejuif" }) {
+    campusId,
+    campusName,
+    adresse
+  }
+}
+
+mutation updateSalles {
+  updateSalles (value: { salleId: 1, salleName: "B009"}) {
+    salleId,
+    salleName,
+    campus {
+      campusName
+    }
+  }
+}
+
+mutation updateFilieres {
+  updateFilieres (value: { filiereId: 1, filiereName: "DEV FULL STACK"}) {
+    filiereId,
+    filiereName
+  }
+}
+
+mutation updateClasses {
+  updateClasses (value: {classeId: 1, className : "X-MAS-GROUP-1-9"}) {
+    classeId,
+    className,
+    classAnnees
+  }
+}
+
+mutation updateUsers {
+  updateUsers (value: {userId: 1, userEmail:"tonyo@email.fr"}) {
+    userId,
+    userName,
+    userEmail
+  }
+}
+
+
+mutation deleteCampus {
+  deleteCampus (campusId :1) {
+    campusId
+  }
+}
+
+mutation deleteSalles {
+  deleteSalles (sallesId :1) {
+    salleId
+  }
+}
+
+mutation deleteFilieres {
+  deleteFilieres (filiereId :1) {
+    filiereId,
+    filiereName
+  }
+}
+
+mutation deleteClasses {
+  deleteClasses (classeId: 1) {
+    classeId,
+    className,
+    classAnnees
+  }
+}
+
+mutation deleteUser {
+  deleteUsers (userId: 1) {
+    userId,
+    userName,
+    userEmail
+  }
+}

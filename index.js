@@ -6,6 +6,7 @@ import { campusControlers } from './controlers/campus.js'
 import { sallesControlers } from './controlers/salles.js'
 import { filieresControlers } from './controlers/filieres.js'
 import { classesControlers } from './controlers/classes.js'
+import { usersControlers } from './controlers/users.js'
 
 var app = express()
 const dateScalar = new GraphQLScalarType({
@@ -30,16 +31,16 @@ var schema = buildSchema(`
 	scalar Date
 
   type campus {
-    campusId : Int
-    campusName : String 
-    adresse :  String
+    campusId : Int!
+    campusName : String !
+    adresse :  String!
     salles : [salles]
   }
   type campusArchive {
-    campusId : Int
-    campusName : String 
-    adresse :  String
-    deleted_at : Date
+    campusId : Int!
+    campusName : String!
+    adresse :  String!
+    deleted_at : Date!
   }
   input campusSelect {
     campusId : Int
@@ -57,17 +58,17 @@ var schema = buildSchema(`
   } 
 
   type salles {
-    salleId : Int
-    campusId : Int
-    salleName : String
+    salleId : Int!
+    campusId : Int!
+    salleName : String!
     planning : [planning]
     campus : campus
   }
   type sallesArchive {
-    salleId : Int
-    campusId : Int
-    salleName : String
-    deleted_at : Date
+    salleId : Int!
+    campusId : Int!
+    salleName : String!
+    deleted_at : Date!
   }
   input sallesSelect {
     salleId : Int
@@ -85,15 +86,15 @@ var schema = buildSchema(`
   }
 
   type filieres {
-    filiereId : Int
-    filiereName : String
+    filiereId : Int!
+    filiereName : String!
     classes : [classes]
     filieres_has_matieres : [filieres_has_matieres]
   }
   type filieresArchive {
-    filiereId : Int
-    filiereName : String
-    deleted_at : Date
+    filiereId : Int!
+    filiereName : String!
+    deleted_at : Date!
   }
   input filieresSelect {
     filiereId : Int
@@ -109,20 +110,20 @@ var schema = buildSchema(`
 
 
   type classes {
-    classeId : Int
-    filiereId : Int
-    className : String
-    classAnnees : Date
+    classeId : Int!
+    filiereId : Int!
+    className : String!
+    classAnnees : Date!
     filieres : filieres
     eleves : [eleves]
     planning : [planning]
   }
   type classesArchive {
-    classeId : Int
-    filiereId : Int
-    className : String
-    classAnnees : Date
-    deleted_at : Date
+    classeId : Int!
+    filiereId : Int!
+    className : String!
+    classAnnees : Date!
+    deleted_at : Date!
   }
   input classesSelect {
     classeId : Int
@@ -140,6 +141,35 @@ var schema = buildSchema(`
     filiereId : Int
     className : String
     classAnnees : Date
+  } 
+
+
+  type users {
+    userId : Int!
+    userEmail : String!
+    userName : String!
+    eleves : [eleves]
+    professeurs : [professeurs]
+  }
+  type usersArchive {
+    userId : Int!
+    userEmail : String!
+    userName : String!
+    deleted_at : Date!
+  }
+  input usersSelect {
+    userId : Int
+    userEmail : String
+    userName : String
+  }
+  input usersInsert {
+    userEmail : String!
+    userName : String!
+  }   
+  input usersUpdate {
+    userId : Int!
+    userEmail : String
+    userName : String
   } 
 
   type eleves {
@@ -209,15 +239,6 @@ var schema = buildSchema(`
   }
 
 
-  type users {
-    userId : Int
-    userEmail : String
-    userName : String
-    eleves : [eleves]
-    professeurs : [professeurs]
-  }
-
-
   type Query {
 		
 		"Permet de recuperer la liste des campus"
@@ -250,51 +271,68 @@ var schema = buildSchema(`
     "Permet de recuperer la liste des classes archivées"
 		getClassesArchive (value: classesSelect): [classesArchive]
 
+    "Permet de recuperer la liste des utilisateurs"
+		getUsers (value: usersSelect): [users]
+
+    "Permet de recuperer la liste des utilisateurs archivés"
+		getUsersArchive (value: usersSelect): [usersArchive]
+
   }
 
   type Mutation {
 
     "Permet d'ajouter un campus"
-    insertCampus (value: campusInsert) : campus
+    insertCampus (value: campusInsert!) : campus
 
 		"Permet de modifier un campus"
-    updateCampus (value: campusUpdate) : campus
+    updateCampus (value: campusUpdate!) : campus
 
 		"Permet de supprimer un campus"
-    deleteCampus (campusId: Int) : campus
+    deleteCampus (campusId: Int!) : campus
 
 
 
     "Permet d'ajouter une salle"
-    insertSalles (value: sallesInsert) : salles
+    insertSalles (value: sallesInsert!) : salles
 
 		"Permet de modifier une salle"
-    updateSalles (value: sallesUpdate) : salles
+    updateSalles (value: sallesUpdate!) : salles
 
 		"Permet de supprimer une salle"
-    deleteSalles (sallesId: Int) : salles
+    deleteSalles (sallesId: Int!) : salles
 
 
 
     "Permet d'ajouter une filiere"
-    insertFilieres (value: filieresInsert) : filieres
+    insertFilieres (value: filieresInsert!) : filieres
 
 		"Permet de modifier une filiere"
-    updateFilieres (value: filieresUpdate) : filieres
+    updateFilieres (value: filieresUpdate!) : filieres
 
 		"Permet de supprimer une filiere"
-    deleteFilieres (filiereId: Int) : filieres
+    deleteFilieres (filiereId: Int!) : filieres
 
 
 
     "Permet d'ajouter une classe"
-    insertClasses (value: classesInsert) : classes
+    insertClasses (value: classesInsert!) : classes
 
-		"Permet de modifier une filiere"
-    updateClasses (value: classesUpdate) : classes
+		"Permet de modifier une classe"
+    updateClasses (value: classesUpdate!) : classes
 
-		"Permet de supprimer une filiere"
-    deleteClasses (classeId: Int) : classes
+		"Permet de supprimer une classe"
+    deleteClasses (classeId: Int!) : classes
+
+
+
+    "Permet d'ajouter un utilisateur"
+    insertUsers (value: usersInsert!) : users
+
+		"Permet de modifier un utilisateur"
+    updateUsers (value: usersUpdate!) : users
+
+		"Permet de supprimer un utilisateur"
+    deleteUsers (userId: Int!) : users
 
   }
 `)
@@ -307,7 +345,8 @@ var root = {
 	...campusControlers,
   ...sallesControlers,
   ...filieresControlers,
-  ...classesControlers
+  ...classesControlers,
+  ...usersControlers
 	
 
 }
