@@ -7,6 +7,7 @@ import { sallesControlers } from './controlers/salles.js'
 import { filieresControlers } from './controlers/filieres.js'
 import { classesControlers } from './controlers/classes.js'
 import { usersControlers } from './controlers/users.js'
+import { elevesControlers } from './controlers/eleves.js'
 
 var app = express()
 const dateScalar = new GraphQLScalarType({
@@ -173,13 +174,33 @@ var schema = buildSchema(`
   } 
 
   type eleves {
-    eleveId : Int
-    userId : Int
-    classeId : Int
+    eleveId : Int!
+    userId : Int!
+    classeId : Int!
     users : users
     classes : classes
     notes :[notes]
   }
+  type elevesArchive {
+    eleveId : Int!
+    userId : Int!
+    classeId : Int!
+    deleted_at : Date!
+  }
+  input elevesSelect {
+    eleveId : Int
+    userId : Int
+    classeId : Int
+  }
+  input elevesInsert {
+    userId : Int!
+    classeId : Int!
+  }   
+  input elevesUpdate {
+    eleveId : Int!
+    userId : Int
+    classeId : Int
+  } 
 
   type filieres_has_matieres {
     filiereId : Int
@@ -277,6 +298,12 @@ var schema = buildSchema(`
     "Permet de recuperer la liste des utilisateurs archivés"
 		getUsersArchive (value: usersSelect): [usersArchive]
 
+    "Permet de recuperer la liste des eleves"
+		getEleves (value: elevesSelect): [eleves]
+
+    "Permet de recuperer la liste des utilisateurs archivés"
+		getElevesArchive (value: elevesSelect): [elevesArchive]
+
   }
 
   type Mutation {
@@ -334,6 +361,17 @@ var schema = buildSchema(`
 		"Permet de supprimer un utilisateur"
     deleteUsers (userId: Int!) : users
 
+
+
+    "Permet d'ajouter un eleve"
+    insertEleves (value: elevesInsert!) : eleves
+
+		"Permet de modifier un eleve"
+    updateEleves (value: elevesUpdate!) : eleves
+
+		"Permet de supprimer un eleve"
+    deleteEleves (eleveId: Int!) : eleves
+
   }
 `)
 
@@ -346,7 +384,8 @@ var root = {
   ...sallesControlers,
   ...filieresControlers,
   ...classesControlers,
-  ...usersControlers
+  ...usersControlers,
+  ...elevesControlers
 	
 
 }

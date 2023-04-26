@@ -18,7 +18,7 @@ export const filieresControlers = {
 		})
 	},
 
-    getFilieresArchive : async ({value}) => {
+  getFilieresArchive : async ({value}) => {
 		return await prisma.filieresarchive.findMany({
 			where : value,
 		})

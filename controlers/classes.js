@@ -9,13 +9,17 @@ export const classesControlers = {
 			where : value,
 			include: {
 				filieres: true,
-				eleves: true,
+				eleves: {
+					include : {
+						users: true
+					}
+				},
 				planning: true,
 			}
 		})
 	},
 
-    getClassesArchive : async ({value}) => {
+  getClassesArchive : async ({value}) => {
 		return await prisma.classesarchive.findMany({
 			where : value,
 		})
@@ -24,6 +28,9 @@ export const classesControlers = {
 	insertClasses : async ({value}) => {
 		return await prisma.classes.create({
 			data : value,
+			include: {
+				filieres: true
+			}
 		})
 	},
 

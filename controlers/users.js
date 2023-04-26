@@ -14,7 +14,7 @@ export const usersControlers = {
 		})
 	},
 
-    getUsersArchive : async ({value}) => {
+  getUsersArchive : async ({value}) => {
 		return await prisma.usersarchive.findMany({
 			where : value,
 		})
@@ -22,11 +22,7 @@ export const usersControlers = {
 
 	insertUsers : async ({value}) => {
 		return await prisma.users.create({
-			data : value,
-			include: {
-        eleves: true,
-				professeurs: true,
-			}
+			data : value
 		})
 	},
 

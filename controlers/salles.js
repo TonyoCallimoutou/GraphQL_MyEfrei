@@ -23,6 +23,9 @@ export const sallesControlers = {
 	insertSalles : async ({value}) => {
 		return await prisma.salles.create({
 			data : value,
+			include: {
+				campus: true,
+			}
 		})
 	},
 
