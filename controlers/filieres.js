@@ -11,7 +11,15 @@ export const filieresControlers = {
 				classes: true,
 				filieres_has_matieres: {
 					include :{
-						matieres: true
+						matieres: {
+							include: {
+								professeurs: {
+									include: {
+										users: true
+									}
+								}
+							}
+						}
 					}
 				}
 			}
@@ -40,7 +48,15 @@ export const filieresControlers = {
 				classes: true,
 				filieres_has_matieres: {
 					include :{
-						matieres: true
+						matieres: {
+							include: {
+								professeurs: {
+									include: {
+										users: true
+									}
+								}
+							}
+						}
 					}
 				}
 			}
@@ -56,7 +72,15 @@ export const filieresControlers = {
 				classes: true,
 				filieres_has_matieres: {
 					include :{
-						matieres: true
+						matieres: {
+							include: {
+								professeurs: {
+									include: {
+										users: true
+									}
+								}
+							}
+						}
 					}
 				}
 			}

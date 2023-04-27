@@ -6,7 +6,7 @@ export const planningControlers = {
 
 	getPlanning : async ({value}) => {
 
-    let whereConditon = value
+    let whereConditon = {}
 
     if (value && value.periode) {
       whereConditon = {
@@ -29,6 +29,9 @@ export const planningControlers = {
         }
       }
     }
+		else {
+			whereConditon = value;
+		}
 
 		return await prisma.planning.findMany({
       take: 31,
@@ -49,8 +52,38 @@ export const planningControlers = {
 	},
 
 	getPlanningArchive : async ({value}) => {
+		let whereConditon = {}
+
+    if (value && value.periode) {
+      whereConditon = {
+        AND : {
+          // BASE
+          planningId : value.planningId,
+          classeId : value.classeId,
+          matiereId : value.matiereId,
+          salleId : value.salleId,
+          
+          // Condition periode
+          OR : {
+            dateDebut : {
+              gte: value.periode.dateDebut
+            },
+            dateFin : {
+              lte: value.periode.dateFin
+            }
+          }
+        }
+      }
+    }
+		else {
+			whereConditon = value;
+		}
 		return await prisma.planningarchive.findMany({
-			where : value
+      take: 31,
+      where : whereConditon,
+      orderBy: {
+        dateDebut: 'asc',
+      },
 		})
 	},
 
