@@ -12,8 +12,15 @@ import { professeursControlers } from './controlers/professeurs.js'
 import { matieresControlers } from './controlers/matieres.js'
 import { notesControlers } from './controlers/notes.js'
 import { planningControlers } from './controlers/planning.js'
+import * as dotenv from 'dotenv'
+import cookieParser from 'cookie-parser'
+import { verifyToken } from './utils/auth.js'
+import { authControlers } from './controlers/authentification.js'
+dotenv.config();
+
 
 var app = express()
+
 const dateScalar = new GraphQLScalarType({
   name: 'Date',
   serialize(value) {
@@ -154,29 +161,42 @@ var schema = buildSchema(`
   type users {
     userId : Int!
     userEmail : String!
+    password: String!
     userName : String!
+    isAdmin: Boolean!
     eleves : [eleves]
     professeurs : professeurs
   }
   type usersArchive {
     userId : Int!
     userEmail : String!
+    password: String!
     userName : String!
+    isAdmin: Boolean!
     deleted_at : Date!
   }
   input usersSelect {
     userId : Int
     userEmail : String
     userName : String
+    isAdmin: Boolean
   }
   input usersInsert {
     userEmail : String!
+    password: String!
     userName : String!
+    isAdmin: Boolean
+  }   
+  input usersLogin {
+    userEmail : String!
+    password: String!
   }   
   input usersUpdate {
     userId : Int!
+    password: String
     userEmail : String
     userName : String
+    isAdmin: Boolean
   } 
 
 
@@ -440,6 +460,15 @@ var schema = buildSchema(`
 
   type Mutation {
 
+    "Permet de creer un utilisateur"
+    registerUser (value: usersInsert!) : users
+
+    "Permet de s'authentifier"
+    loginUser (value: usersLogin!) : users
+
+    "Permet de se deconnecter"
+    disconnectUser : users
+
     "Permet d'ajouter un campus"
     insertCampus (value: campusInsert!) : campus
 
@@ -483,9 +512,6 @@ var schema = buildSchema(`
     deleteClasses (classeId: Int!) : classes
 
 
-
-    "Permet d'ajouter un utilisateur"
-    insertUsers (value: usersInsert!) : users
 
 		"Permet de modifier un utilisateur"
     updateUsers (value: usersUpdate!) : users
@@ -551,33 +577,49 @@ var schema = buildSchema(`
   }
 `)
 
+app.use(cookieParser());
 
 
 // The root provides a resolver function for each API endpoint
-var root = {
 
-	...campusControlers,
-  ...sallesControlers,
-  ...filieresControlers,
-  ...classesControlers,
-  ...usersControlers,
-  ...elevesControlers,
-  ...professeursControlers,
-  ...matieresControlers,
-	...notesControlers,
-  ...planningControlers
+app.use("/graphql", (req,res,next) => {
+  var root;
 
-}
+  const { token } = req.cookies;
+  if (token) {
+    const { user } = verifyToken(token);
+    req.user = user;
+    // The root provides a resolver function for each API endpoint
+    root = {
+      
+      ...authControlers,
+  
+      ...campusControlers,
+      ...sallesControlers,
+      ...filieresControlers,
+      ...classesControlers,
+      ...usersControlers,
+      ...elevesControlers,
+      ...professeursControlers,
+      ...matieresControlers,
+      ...notesControlers,
+      ...planningControlers
+    }
+  }
+  else {
+    root = {
+      ...authControlers,
+    }
+  };
 
-
-app.use(
-  "/graphql",
   graphqlHTTP({
     schema: schema,
     rootValue: root,
     graphiql: true,
-  })
-)
+    context: { req, res }
+  })(req, res, next);
+
+});
 
 
 app.listen(3200, ()=>{

@@ -184,7 +184,9 @@ model sallesarchive {
 model users {
   userId      Int          @id @default(autoincrement())
   userEmail   String       @unique(map: "userEmail") @db.VarChar(45)
+  password    String       @db.VarChar(45)
   userName    String       @db.VarChar(45)
+  isAdmin     Boolean?     @default(false)
   eleves      eleves[]
   professeurs professeurs?
 }

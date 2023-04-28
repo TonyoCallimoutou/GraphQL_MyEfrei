@@ -51,14 +51,14 @@ INSERT INTO Classes (filiereId, className, classAnnees)
     (3,"X-BAC-DEV-1-1", '2022-09-01'),
     (3,"X-BAC-DEV-1-2",'2022-09-01');
     
-INSERT INTO Users (userEmail, userName)
+INSERT INTO Users (userEmail, password , userName)
 	VALUES
-    ('tonyo@email.com','Tonyo'),
-    ('simon@email.com','Simon'),
-    ('anouar@email.com','Anouar'),
-    ('hugo@email.com','Hugo'),
-    ('melvin@email.com','Bissor Melvin'),
-    ('alexandre@email.com','Carbonneau Alexandre');
+    ('tonyo@email.com', 'password','Tonyo'),
+    ('simon@email.com', 'password','Simon'),
+    ('anouar@email.com', 'password','Anouar'),
+    ('hugo@email.com', 'password','Hugo'),
+    ('melvin@email.com', 'password','Bissor Melvin'),
+    ('alexandre@email.com', 'password','Carbonneau Alexandre');
     
 INSERT INTO Eleves (userId, classeId) 
 	VALUES

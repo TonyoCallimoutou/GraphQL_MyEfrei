@@ -19,11 +19,21 @@ export const planningControlers = {
           
           // Condition periode
           OR : {
-            dateDebut : {
-              gte: value.periode.dateDebut
+            AND : {
+              dateDebut : {
+                gte: value.periode.dateDebut
+              },
+              dateDebut : {
+                lte: value.periode.dateFin
+              }
             },
-            dateFin : {
-              lte: value.periode.dateFin
+            AND : {
+              dateFin : {
+                lte: value.periode.dateFin
+              },
+              dateFin: {
+                gte: value.periode.dateDebut
+              }
             }
           }
         }
@@ -65,11 +75,21 @@ export const planningControlers = {
           
           // Condition periode
           OR : {
-            dateDebut : {
-              gte: value.periode.dateDebut
+            AND : {
+              dateDebut : {
+                gte: value.periode.dateDebut
+              },
+              dateDebut : {
+                lte: value.periode.dateFin
+              }
             },
-            dateFin : {
-              lte: value.periode.dateFin
+            AND : {
+              dateFin : {
+                lte: value.periode.dateFin
+              },
+              dateFin: {
+                gte:value.periode.dateDebut
+              }
             }
           }
         }
@@ -78,6 +98,7 @@ export const planningControlers = {
 		else {
 			whereConditon = value;
 		}
+
 		return await prisma.planningarchive.findMany({
       take: 31,
       where : whereConditon,
@@ -88,6 +109,51 @@ export const planningControlers = {
 	},
 
 	insertPlanning : async ({value}) => {
+
+    let whereConditon = {
+      AND : {
+        // BASE
+        salleId : value.salleId,
+        
+        // Condition periode
+        OR : {
+          AND : {
+            dateDebut : {
+              gte: value.dateDebut
+            },
+            dateDebut : {
+              lte: value.dateFin
+            }
+          },
+          AND : {
+            dateFin : {
+              lte: value.dateFin
+            },
+            dateFin: {
+              gte:value.dateDebut
+            }
+          }
+        }
+      }
+    }
+
+    // Liste des planning compris dans la periode
+		let listPlanning = await prisma.planning.findMany({
+      where : whereConditon,
+      orderBy: {
+        dateDebut: 'asc',
+      },
+		})
+
+    // Filter
+    let dateFin = new Date(value.dateFin)
+    let dateDebut = new Date(value.dateDebut);
+    listPlanning.forEach(cours => {
+      if (dateFin.getTime() !== cours.dateDebut.getTime() || dateDebut.getTime() === cours.dateFin.getTime()) {
+				throw new Error("Salle déja occupé");
+      }
+    })
+
 		return await prisma.planning.create({
 			data : value,
 			include: {
@@ -103,6 +169,51 @@ export const planningControlers = {
 	},
 
 	updatePlanning : async ({value}) => {
+
+    let whereConditon = {
+      AND : {
+        // BASE
+        salleId : value.salleId,
+        
+        // Condition periode
+        OR : {
+          AND : {
+            dateDebut : {
+              gte: value.dateDebut
+            },
+            dateDebut : {
+              lte: value.dateFin
+            }
+          },
+          AND : {
+            dateFin : {
+              lte: value.dateFin
+            },
+            dateFin: {
+              gte:value.dateDebut
+            }
+          }
+        }
+      }
+    }
+
+    // Liste des planning compris dans la periode
+		let listPlanning = await prisma.planning.findMany({
+      where : whereConditon,
+      orderBy: {
+        dateDebut: 'asc',
+      },
+		})
+
+    // Filter
+    let dateFin = new Date(value.dateFin)
+    let dateDebut = new Date(value.dateDebut);
+    listPlanning.forEach(cours => {
+      if (dateFin.getTime() !== cours.dateDebut.getTime() || dateDebut.getTime() === cours.dateFin.getTime()) {
+				throw new Error("Salle déja occupé");
+      }
+    })
+
 		return await prisma.planning.update({
 			where: {
 				planningId : value.planningId

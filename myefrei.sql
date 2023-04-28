@@ -8,7 +8,6 @@ CREATE TABLE Campus (
     adresse VARCHAR(45) NOT NULL UNIQUE,
     PRIMARY KEY (CampusId)
 );
-
 CREATE TABLE CampusArchive (
     campusId INT NOT NULL,
 	campusName VARCHAR(45) NOT NULL,
@@ -66,7 +65,9 @@ CREATE TABLE ClassesArchive (
 CREATE TABLE Users (
 	userId INT AUTO_INCREMENT NOT NULL,
 	userEmail VARCHAR(45) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
     userName VARCHAR(45) NOT NULL,
+    isAdmin BOOLEAN default false,
     PRIMARY KEY (userId)
 );
 CREATE TABLE UsersArchive (
@@ -86,7 +87,6 @@ CREATE TABLE Eleves (
     FOREIGN KEY (userId) REFERENCES Users(userId),
     FOREIGN KEY (classeId) REFERENCES Classes(classeId)
 );
-
 CREATE TABLE ElevesArchive (
 	eleveId INT NOT NULL,
     userId INT NOT NULL,
@@ -102,7 +102,6 @@ CREATE TABLE Professeurs (
     PRIMARY KEY (professeurId),
     FOREIGN KEY (userId) REFERENCES Users(userId)
 );
-
 CREATE TABLE ProfesseursArchive (
 	professeurId INT NOT NULL,
     userId INT NOT NULL,
@@ -145,7 +144,6 @@ CREATE TABLE Notes (
     FOREIGN KEY (eleveId) REFERENCES Eleves(eleveId),
     FOREIGN KEY (matiereId) REFERENCES Matieres(matiereId)
 );
-
 CREATE TABLE NotesArchive (
 	noteId INT NOT NULL,
     eleveId INT NOT NULL,
@@ -283,7 +281,7 @@ DELIMITER $$
 CREATE TRIGGER Planning_delete_trigger 
 	BEFORE DELETE ON Planning
 	FOR EACH ROW
-	BEGIN
+	BEGIN	
 		INSERT INTO PlanningArchive(planningId, classeId, matiereId, salleId, dateDebut, dateFin)
 			VALUES(old.planningId, old.classeId, old.matiereId, old.salleId, old.dateDebut, old.dateFin);
 	END $$

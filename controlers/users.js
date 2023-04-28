@@ -20,12 +20,6 @@ export const usersControlers = {
 		})
 	},
 
-	insertUsers : async ({value}) => {
-		return await prisma.users.create({
-			data : value
-		})
-	},
-
 	updateUsers : async ({value}) => {
 		return await prisma.users.update({
 			where: {
