@@ -59,7 +59,12 @@ export const planningControlers = {
         }
 			}
 		})
-	},
+	}
+
+}
+
+
+export const planningControlersAdmin = {
 
 	getPlanningArchive : async ({value}) => {
 		let whereConditon = {}

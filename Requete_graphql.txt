@@ -1,7 +1,27 @@
+mutation registerUsers {
+  registerUser (value: {userName: "Admin", userEmail:"admin@test.fr", password:"passwordTest", isAdmin: true}) {
+    userId,
+    userName,
+    userEmail,
+  }
+}
+
+mutation loginUser {
+  loginUser (value: {userEmail: "admin@test.fr", password: "passwordTest"}) {
+    userName
+  }
+}
+
+mutation disconnectUser {
+  disconnectUser {
+    userName
+  }
+}
+
 query getCampus {
   getCampus {
     campusId,
-    campusName
+    campusName,
     adresse,
     salles {
       salleName
@@ -12,7 +32,7 @@ query getCampus {
 query getCampusArchive {
   getCampusArchive {
     campusId,
-    campusName
+    campusName,
     adresse,
     deleted_at
   }
@@ -25,9 +45,6 @@ query getSalles {
   	campus {
       campusId,
       campusName
-    }
-    planning {
-      planningId
     }
   }
 }
@@ -49,7 +66,12 @@ query getFiliere {
     },
     filieres_has_matieres {
       matieres {
-        matiereName
+        matiereName,
+        professeurs {
+          users {
+            userName
+          }
+        }
       }
     }
   }
@@ -91,6 +113,8 @@ query getUsers {
     userId,
     userName,
     userEmail,
+    password,
+    isAdmin,
     eleves {
       classeId
     }
@@ -187,7 +211,7 @@ query getNotesArchive {
 }
 
 query getPlanning {
-	getPlanning {
+	getPlanning (value: {periode: {dateDebut: "2023-04-26T00:00:00.000Z", dateFin: "2023-04-26T01:00:00.000Z"}}) {
     planningId,
     matieres {
       matiereName
@@ -247,14 +271,6 @@ mutation insertClasses {
   }
 }
 
-mutation insertUsers {
-  insertUsers (value: {userName: "TONYO", userEmail:"tonyo.email.fr"}) {
-    userId,
-    userName,
-    userEmail
-  }
-}
-
 mutation insertEleves {
   insertEleves (value: {userId: 1, classeId:1}) {
     eleveId,
@@ -301,7 +317,25 @@ mutation insertNotes {
 }
 
 mutation insertPlanning {
-  insertPlanning (value: {classeId:1, matiereId: 1,salleId: 1,dateDebut : "2022-04-26T14:00:00.000Z", dateFin: "2022-04-26T17:30:00.000Z"}) {
+  insertPlanning (value: {classeId:1, matiereId: 2,salleId: 1,dateDebut : "2022-04-26T14:00:00.000Z", dateFin: "2022-04-26T17:30:00.000Z"}) {
+    planningId,
+    matieres {
+      matiereName
+    },
+    salles {
+      campus {
+        campusName
+      }
+      salleName
+    },
+    dateDebut,
+    dateFin
+    
+  }
+}
+
+mutation insertPlanningChevauchement {
+  insertPlanning (value: {classeId:1, matiereId: 2,salleId: 1,dateDebut : "2022-04-26T09:00:00.000Z", dateFin: "2022-04-26T14:00:00.000Z"}) {
     planningId,
     matieres {
       matiereName

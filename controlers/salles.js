@@ -12,9 +12,13 @@ export const sallesControlers = {
 				planning: true,
 			}
 		})
-	},
+	}
 
-    getSallesArchive : async ({value}) => {
+}
+
+export const sallesControlersAdmin = {
+
+  getSallesArchive : async ({value}) => {
 		return await prisma.sallesarchive.findMany({
 			where : value,
 		})

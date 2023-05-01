@@ -45,7 +45,6 @@ export const authControlers = {
     if (token) {
       const { user } = verifyToken(token);
 			context.res.clearCookie("token");
-			console.log(user);
       return user;
     }
     return null;

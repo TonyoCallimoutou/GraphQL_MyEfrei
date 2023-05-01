@@ -22,7 +22,11 @@ export const matieresControlers = {
 				planning: true,
 			}
 		})
-	},
+	}
+
+}
+
+export const matieresControlersAdmin = {
 
   getMatieresArchive : async ({value}) => {
 		return await prisma.matieresarchive.findMany({

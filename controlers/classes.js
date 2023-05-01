@@ -17,7 +17,11 @@ export const classesControlers = {
 				planning: true,
 			}
 		})
-	},
+	}
+
+}
+
+export const classesControlersAdmin = {
 
   getClassesArchive : async ({value}) => {
 		return await prisma.classesarchive.findMany({

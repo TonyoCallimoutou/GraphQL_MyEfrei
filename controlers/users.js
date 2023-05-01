@@ -12,9 +12,13 @@ export const usersControlers = {
 				professeurs: true,
 			}
 		})
-	},
+	}
 
-  getUsersArchive : async ({value}) => {
+}
+
+export const usersControlersAdmin = {
+	
+	getUsersArchive : async ({value}) => {
 		return await prisma.usersarchive.findMany({
 			where : value,
 		})

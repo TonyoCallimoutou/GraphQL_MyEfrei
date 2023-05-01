@@ -1,17 +1,16 @@
-import { PrismaClient } from '@prisma/client'
 import express from "express"
 import { graphqlHTTP } from "express-graphql"
 import { buildSchema, GraphQLScalarType } from "graphql"
 import { campusControlers, campusControlersAdmin } from './controlers/campus.js'
-import { sallesControlers } from './controlers/salles.js'
-import { filieresControlers } from './controlers/filieres.js'
-import { classesControlers } from './controlers/classes.js'
-import { usersControlers } from './controlers/users.js'
-import { elevesControlers } from './controlers/eleves.js'
-import { professeursControlers } from './controlers/professeurs.js'
-import { matieresControlers } from './controlers/matieres.js'
-import { notesControlers } from './controlers/notes.js'
-import { planningControlers } from './controlers/planning.js'
+import { sallesControlers, sallesControlersAdmin } from './controlers/salles.js'
+import { filieresControlers, filieresControlersAdmin } from './controlers/filieres.js'
+import { classesControlers, classesControlersAdmin } from './controlers/classes.js'
+import { usersControlers, usersControlersAdmin } from './controlers/users.js'
+import { elevesControlers, elevesControlersAdmin } from './controlers/eleves.js'
+import { professeursControlers, professeursControlersAdmin } from './controlers/professeurs.js'
+import { matieresControlers, matieresControlersAdmin } from './controlers/matieres.js'
+import { notesControlers, notesControlersAdmin } from './controlers/notes.js'
+import { planningControlers, planningControlersAdmin } from './controlers/planning.js'
 import * as dotenv from 'dotenv'
 import cookieParser from 'cookie-parser'
 import { verifyToken } from './utils/auth.js'
@@ -587,24 +586,53 @@ app.use("/graphql", (req,res,next) => {
 
   const { token } = req.cookies;
   if (token) {
-    // const { user } = verifyToken(token);
+    const { user } = verifyToken(token);
+
+
+    if (user.isAdmin) {
+      root = {
     
-    // The root provides a resolver function for each API endpoint
-    root = {
+        ...authControlers,
     
-      ...authControlers,
-  
-      ...campusControlers,
-      ...campusControlersAdmin,
-      ...sallesControlers,
-      ...filieresControlers,
-      ...classesControlers,
-      ...usersControlers,
-      ...elevesControlers,
-      ...professeursControlers,
-      ...matieresControlers,
-      ...notesControlers,
-      ...planningControlers
+        ...campusControlers,
+        ...campusControlersAdmin,
+        ...sallesControlers,
+        ...sallesControlersAdmin,
+        ...filieresControlers,
+        ...filieresControlersAdmin,
+        ...classesControlers,
+        ...classesControlersAdmin,
+        ...usersControlers,
+        ...usersControlersAdmin,
+        ...elevesControlers,
+        ...elevesControlersAdmin,
+        ...professeursControlers,
+        ...professeursControlersAdmin,
+        ...matieresControlers,
+        ...matieresControlersAdmin,
+        ...notesControlers,
+        ...notesControlersAdmin,
+        ...planningControlers,
+        ...planningControlersAdmin
+      }
+    }
+    else {
+      root = {
+    
+        ...authControlers,
+    
+        ...campusControlers,
+        ...campusControlersAdmin,
+        ...sallesControlers,
+        ...filieresControlers,
+        ...classesControlers,
+        ...usersControlers,
+        ...elevesControlers,
+        ...professeursControlers,
+        ...matieresControlers,
+        ...notesControlers,
+        ...planningControlers
+      }
     }
 
   }

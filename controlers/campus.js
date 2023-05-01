@@ -14,10 +14,7 @@ export const campusControlers = {
 	}
 }
 
-
-
 export const campusControlersAdmin = {
-
 	getCampusArchive : async ({value}) => {
 		return await prisma.campusarchive.findMany({
 			where : value

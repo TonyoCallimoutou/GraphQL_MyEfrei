@@ -24,7 +24,12 @@ export const filieresControlers = {
 				}
 			}
 		})
-	},
+	}
+
+}
+
+
+export const filieresControlersAdmin = {
 
   getFilieresArchive : async ({value}) => {
 		return await prisma.filieresarchive.findMany({
@@ -32,6 +37,7 @@ export const filieresControlers = {
 		})
 	},
 
+	
 	insertFilieres : async ({value}) => {
 		return await prisma.filieres.create({
 			data : value,

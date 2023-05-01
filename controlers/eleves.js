@@ -13,7 +13,11 @@ export const elevesControlers = {
         notes: true,
 			}
 		})
-	},
+	}
+
+}
+
+export const elevesControlersAdmin = {
 
   getElevesArchive : async ({value}) => {
 		return await prisma.elevesarchive.findMany({

@@ -16,7 +16,12 @@ export const notesControlers = {
 				matieres: true,
 			}
 		})
-	},
+	}
+
+}
+
+
+export const notesControlersAdmin = {
 
   getNotesArchive : async ({value}) => {
 		return await prisma.notesarchive.findMany({
