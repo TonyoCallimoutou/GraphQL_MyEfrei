@@ -11,7 +11,12 @@ export const campusControlers = {
 				salles: true
 			}
 		})
-	},
+	}
+}
+
+
+
+export const campusControlersAdmin = {
 
 	getCampusArchive : async ({value}) => {
 		return await prisma.campusarchive.findMany({
@@ -51,5 +56,3 @@ export const campusControlers = {
 		})
 	}
 }
-
-

@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client'
 import express from "express"
 import { graphqlHTTP } from "express-graphql"
 import { buildSchema, GraphQLScalarType } from "graphql"
-import { campusControlers } from './controlers/campus.js'
+import { campusControlers, campusControlersAdmin } from './controlers/campus.js'
 import { sallesControlers } from './controlers/salles.js'
 import { filieresControlers } from './controlers/filieres.js'
 import { classesControlers } from './controlers/classes.js'
@@ -587,14 +587,15 @@ app.use("/graphql", (req,res,next) => {
 
   const { token } = req.cookies;
   if (token) {
-    const { user } = verifyToken(token);
-    req.user = user;
+    // const { user } = verifyToken(token);
+    
     // The root provides a resolver function for each API endpoint
     root = {
-      
+    
       ...authControlers,
   
       ...campusControlers,
+      ...campusControlersAdmin,
       ...sallesControlers,
       ...filieresControlers,
       ...classesControlers,
@@ -605,6 +606,7 @@ app.use("/graphql", (req,res,next) => {
       ...notesControlers,
       ...planningControlers
     }
+
   }
   else {
     root = {
@@ -623,5 +625,5 @@ app.use("/graphql", (req,res,next) => {
 
 
 app.listen(3200, ()=>{
-  console.log("Running a GraphQL API server at localhost:4000/graphql")
+  console.log("Running a GraphQL API server at localhost:3200/graphql")
 })

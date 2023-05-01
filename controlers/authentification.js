@@ -19,7 +19,6 @@ export const authControlers = {
 	},
 
 	loginUser : async ({value}, context) => {
-		console.log(context)
 		let user = await prisma.users.findUnique({
 			where: {
 				userEmail : value.userEmail
@@ -41,13 +40,11 @@ export const authControlers = {
 		}
 	},
 
-  disconnectUser : async (context) => {
-    const { token } = context.res.cookie;
-		console.log(token)
+  disconnectUser : async ({value}, context) => {
+    const { token } = context.req.cookies;
     if (token) {
       const { user } = verifyToken(token);
-			console.log(user)
-      context.req.cookie('token', null, { httpOnly: true, secure: true });
+			context.res.clearCookie("token");
 			console.log(user);
       return user;
     }
